@@ -81,4 +81,4 @@ workflows:
       - build
       - buildimage
       - publishimage
-          requires: [buildimage]
+          requires: buildimage
