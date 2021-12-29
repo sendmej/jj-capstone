@@ -49,7 +49,7 @@ jobs:
          command: |
            docker build -t $IMAGE_NAME:latest .
      - run:
-         name: Archive Docker imag
+         name: Archive Docker image
          command: docker save -o image.tar $IMAGE_NAME
      - persist_to_workspace:
          root: .
