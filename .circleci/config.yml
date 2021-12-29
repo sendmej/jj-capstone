@@ -81,4 +81,3 @@ workflows:
       - build
       - buildimage
       - publishimage
-          requires: buildimage
