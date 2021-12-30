@@ -34,7 +34,7 @@ jobs:
          . venv/bin/activate
            make lint 
 
- buildimage:
+ build-image:
    environment:
      IMAGE_NAME: josephjoy038/caprepo
    docker:
@@ -56,7 +56,7 @@ jobs:
          paths:
            - .
 
- publishimage:
+ publish-image:
    environment:
      IMAGE_NAME: josephjoy038/caprepo
    docker:
@@ -81,4 +81,4 @@ workflows:
       - build
       - buildimage
       - publishimage
-          requires: buildimage
+          requires: [build-image]
