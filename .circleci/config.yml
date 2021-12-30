@@ -76,11 +76,9 @@ jobs:
             docker push $IMAGE_NAME:latest 
 
 workflows:
-  version: 2
   default:
     jobs:
       - build
       - buildimage
       - publishimage
-          requires: 
-           - [buildimage]
+          requires: buildimage
