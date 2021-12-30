@@ -1,5 +1,4 @@
-version: 2
-
+version: 2.1
 jobs:
  
  build:
@@ -76,6 +75,7 @@ jobs:
             docker push $IMAGE_NAME:latest 
 
 workflows:
+  version: 2
   default:
     jobs:
       - build
