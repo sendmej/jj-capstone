@@ -1,5 +1,6 @@
 version: 2.1
 jobs:
+ 
  build:
    docker:
      - image: python:3.7.3-stretch
@@ -76,23 +77,13 @@ jobs:
 
 workflows:
   version: 2
-  build-test-and-deploy:
+  test:
     jobs:
-      - build
-<<<<<<< HEAD
-      - build-image
+      - build:
+      - build-image:
          requires: 
            - build
-      - publish-image
+      - publish-image:
          requires: 
            - build-image
 
-=======
-      - build-image:
-          requires:
-            - build
-      - publish-image:
-          requires:
-            - build-image
-            
->>>>>>> 0fed72dbe33e45068ed83a066ba73d7bde09ea5b
