@@ -76,7 +76,7 @@ jobs:
             docker push $IMAGE_NAME:latest 
 
 workflows:
-  default:
+  test:
     jobs:
       - build
       - build-image
