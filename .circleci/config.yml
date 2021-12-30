@@ -70,7 +70,7 @@ jobs:
           name: Load archived Docker image
           command: docker load -i /tmp/workspace/image.tar
       - run:
-          name: Publish Docker Image
+          name: Publish Docker Image.
           command: |
             docker login -u "$DOCKERHUB_USERNAME" "$DOCKERHUB_PASS"
             docker push $IMAGE_NAME:latest 
@@ -79,7 +79,7 @@ workflows:
   version: 2
   test:
     jobs:
-      - build
+      - build:
       - build-image:
          requires: 
            - build
