@@ -39,7 +39,7 @@ jobs:
    environment:
      IMAGE_NAME: josephjoy038/caprepo
    docker:
-     - image: circleci/buildpack-deps:stretch
+     - image: docker:17.05.0-ce-git
    
    steps:
      - checkout
