@@ -1,4 +1,5 @@
-## Step 1:
+FROM python:3.7.3-stretch
+
 WORKDIR /jjcapstone
 
 ## Step 2:
