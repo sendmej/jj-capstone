@@ -73,7 +73,7 @@ jobs:
           name: Publish Docker Image.
           command: |
             docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASS"
-            docker push $IMAGE_NAME:latest 
+            docker push $IMAGE_NAME:${CIRCLE_WORKFLOW_ID} 
 
 workflows:
   version: 2
