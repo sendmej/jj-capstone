@@ -80,8 +80,8 @@ workflows:
     jobs:
       - build
       - build-image
-          requires:
+          requires
             - build
       - publish-image
-          requires:
+          requires
             - build-image
