@@ -6,6 +6,6 @@ metadata:
   region: us-west-1
 
 nodeGroups:
-  - name: nodegroup1
+  - name: ng-1
     instanceType: t3.micro
     desiredCapacity: 1
