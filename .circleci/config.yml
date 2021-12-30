@@ -79,6 +79,6 @@ workflows:
   default:
     jobs:
       - build
-      - buildimage
-      - publishimage
+      - build-image
+      - publish-image
           requires: [build-image]
