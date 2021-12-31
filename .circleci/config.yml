@@ -104,7 +104,8 @@ jobs:
           name: Prepare K8S templates
           command: |
             aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $CLUSTER_NAME
-            kubectl apply -f blue_eks_deploy.yml --validate=true
+            pwd
+            kubectl apply -f .blue_eks_deploy.yml --validate=true
 
 workflows:
   version: 2
