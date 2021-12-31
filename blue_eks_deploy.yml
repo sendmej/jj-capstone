@@ -16,4 +16,4 @@ spec:
       - name: hello-python
         image: josephjoy038/caprepo:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 80
