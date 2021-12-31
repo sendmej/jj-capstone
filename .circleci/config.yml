@@ -85,7 +85,7 @@ jobs:
     
    steps:
       - run:
-         name: Install awscli
+         name: Install awscli.
          command: |
            pip3 install awscli
       - run:
