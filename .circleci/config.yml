@@ -84,6 +84,9 @@ jobs:
      - image: python:3.7.3-stretch
     
    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
       - run:
          name: Install awscli.
          command: |
@@ -105,7 +108,7 @@ jobs:
           command: |
             aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $CLUSTER_NAME
             pwd
-            kubectl apply -f ./blue_eks_deploy.yml --validate=true
+            kubectl apply -f blue_eks_deploy.yml --validate=true
 
 workflows:
   version: 2
