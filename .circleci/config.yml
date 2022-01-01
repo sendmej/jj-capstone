@@ -34,7 +34,7 @@ jobs:
          . venv/bin/activate
            make lint 
 
- build-image:
+ build-blue-image:
    environment:
      IMAGE_NAME: josephjoy038/caprepo
    docker:
@@ -47,10 +47,11 @@ jobs:
      - run:
          name: Build Docker image
          command: |
-           docker build -t $IMAGE_NAME:latest .
+           cd blueapp
+           docker build -t $IMAGE_NAME:blue .
      - run:
          name: Archive Docker image
-         command: docker save -o image.tar $IMAGE_NAME
+         command: docker save -o blueimage.tar $IMAGE_NAME
      - persist_to_workspace:
          root: ~/app
          paths:
@@ -68,12 +69,12 @@ jobs:
       - setup_remote_docker
       - run:
           name: Load archived Docker image
-          command: docker load -i ~/app/image.tar
+          command: docker load -i ~/app/blueimage.tar
       - run:
           name: Publish Docker Image.
           command: |
             docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASS"
-            docker push $IMAGE_NAME:latest 
+            docker push $IMAGE_NAME:blue 
  
  blue-k8-setup-deploy:
    environment:
@@ -107,6 +108,7 @@ jobs:
           name: Prepare K8S templates
           command: |
             aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $CLUSTER_NAME
+            cd blueapp
             kubectl apply -f blue_eks_deploy.yml --validate=true
 
  deploy-service:
@@ -142,6 +144,83 @@ jobs:
           command: |
             aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $CLUSTER_NAME
             kubectl apply -f loadbalancer.yml --validate=true
+
+  build-green-image:
+   environment:
+     IMAGE_NAME: josephjoy038/caprepo
+   docker:
+     - image: circleci/buildpack-deps:stretch
+   working_directory: ~/app
+   
+   steps:
+     - checkout
+     - setup_remote_docker
+     - run:
+         name: Build Docker image
+         command: |
+           cd greenapp
+           docker build -t $IMAGE_NAME:green .
+     - run:
+         name: Archive Docker image
+         command: docker save -o greenimage.tar $IMAGE_NAME
+     - persist_to_workspace:
+         root: ~/app
+         paths:
+           - .
+
+ publish-green-image:
+   environment:
+     IMAGE_NAME: josephjoy038/caprepo
+   docker:
+     - image: circleci/buildpack-deps:stretch
+ 
+   steps:
+      - attach_workspace:
+          at: ~/app
+      - setup_remote_docker
+      - run:
+          name: Load archived Docker image
+          command: docker load -i ~/app/greenimage.tar
+      - run:
+          name: Publish Docker Image.
+          command: |
+            docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASS"
+            docker push $IMAGE_NAME:green 
+ 
+ green-k8-setup-deploy:
+   environment:
+     CLUSTER_NAME: capstone-eks
+     AWS_DEFAULT_REGION: us-west-1
+
+   docker:
+     - image: python:3.7.3-stretch
+    
+   steps:
+      - checkout
+      - attach_workspace:
+          at: ~/app
+      - run:
+         name: Install awscli.
+         command: |
+           pip3 install awscli
+      - run:
+         name: Install aws-iam-authenticator
+         command: |
+           curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/aws-iam-authenticator
+           chmod +x ./aws-iam-authenticator
+           mv ./aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
+      - run:
+         name: Install kubectl
+         command: |
+           curl -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.13.7/2019-06-11/bin/linux/amd64/kubectl
+           chmod +x ./kubectl
+           mv ./kubectl /usr/local/bin/kubectl
+      - run:
+          name: Prepare K8S templates
+          command: |
+            aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $CLUSTER_NAME
+            cd greenapp
+            kubectl apply -f green_eks_deploy.yml --validate=true
  
   
 
@@ -150,17 +229,25 @@ workflows:
   test:
     jobs:
       - build
-      - build-image:
+      - build-blue-image:
          requires: 
            - build
       - publish-image:
          requires: 
-           - build-image
+           - build-blue-image
       - blue-k8-setup-deploy:
           requires:
             - publish-image
       - deploy-service:
           requires:
             - blue-k8-setup-deploy
-
+      - build-green-image:
+          requires:
+            - deploy-service
+      - publish-green-image:
+          requires:
+            - build-green-image
+      - green-k8-setup-deploy:
+          requires:
+            - publish-green-image
 

@@ -18,4 +18,4 @@ EXPOSE 5000
 ## Step 5:
 # Run app.py at container launch
 
-CMD ["python", "app.py"] 
+CMD ["python", "greenapp.py"] 

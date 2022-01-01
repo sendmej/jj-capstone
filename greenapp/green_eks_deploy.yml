@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-python
+  name: green
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hello-python
+      app: green
   template:
     metadata:
       labels:
-        app: hello-python
+        app: green
     spec:
       containers:
       - name: hello-python
-        image: josephjoy038/caprepo:latest
+        image: josephjoy038/caprepo:green
         ports:
         - containerPort: 5000
