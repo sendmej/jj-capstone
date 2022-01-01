@@ -254,6 +254,7 @@ jobs:
           command: |
             aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $CLUSTER_NAME
             kubectl apply -f switchtogreenlb.yml --validate=true
+            kubectl delete deployments blue
  
   
 
