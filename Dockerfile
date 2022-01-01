@@ -1,5 +1,4 @@
 FROM python:3.7.3-stretch
-correctme
 
 WORKDIR /jjcapstone
 
