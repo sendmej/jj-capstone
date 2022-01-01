@@ -145,7 +145,7 @@ jobs:
             aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $CLUSTER_NAME
             kubectl apply -f loadbalancer.yml --validate=true
 
-  build-green-image:
+ build-green-image:
    environment:
      IMAGE_NAME: josephjoy038/caprepo
    docker:
