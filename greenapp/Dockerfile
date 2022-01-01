@@ -3,7 +3,7 @@ FROM python:3.7.3-stretch
 WORKDIR /jjcapstone
 
 ## Step 2:
-COPY . app.py /jjcapstone/
+COPY . greenapp.py /jjcapstone/
 
 ## Step 3:
 # Install packages from requirements.txt
