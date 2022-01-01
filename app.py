@@ -4,7 +4,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'Hello World'
-
+    return """
+	       <h1 style='color: blue;'>Capstone Blue!</h1>
+           <p>By Joseph Joy</p>
+           """
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)
